@@ -1,5 +1,7 @@
 package com.bbogush.web_screen;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -71,7 +73,7 @@ public class AppService extends Service {
         notificationIntent.setAction(Intent.ACTION_MAIN);
         notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, FLAG_IMMUTABLE);
 
         String channelId = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
                 createNotificationChannel() : "";

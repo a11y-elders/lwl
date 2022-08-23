@@ -28,6 +28,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:label="@string/app_name"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,6 +39,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/action_settings"
+            android:exported="false"
             android:parentActivityName=".MainActivity">
 
             <meta-data
@@ -48,6 +50,7 @@
         <activity android:name=".AdminActivity" android:theme="@style/Theme.Transparent"/>
         <receiver
             android:name=".AdminReceiver"
+            android:exported="true"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
@@ -61,6 +64,7 @@
             android:name=".MouseAccessibilityService"
             android:enabled="true"
             android:label="@string/app_name"
+            android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
