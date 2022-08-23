@@ -1,4 +1,5 @@
 # web_screen
+This app is for a11n innovation demonstration month only.
 The Android Java application for screen sharing and remote control from browser based WebRTC.
 
 ### Use cases
