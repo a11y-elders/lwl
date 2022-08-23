@@ -110,11 +110,5 @@
         </LinearLayout>
 
     </ScrollView>
-    
-    <RelativeLayout
-        android:id="@+id/adLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </RelativeLayout>
 </LinearLayout>
 
