@@ -107,6 +107,17 @@
                 android:textOff="@string/button_start"
                 android:textOn="@string/button_stop"
                 android:textColor="#4a4a4a" />
+
+            <Button
+                android:id="@+id/controlButton"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/bg_button_off"
+                android:text="@string/button_control"
+                android:textColor="#4a4a4a" />
         </LinearLayout>
 
     </ScrollView>

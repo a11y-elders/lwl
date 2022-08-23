@@ -22,6 +22,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -89,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
         if (AppService.isServiceRunning())
             setStartButton();
 
+        Button controlOther = findViewById(R.id.controlButton);
+        controlOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
         initPermission();
 
         initUrl();
