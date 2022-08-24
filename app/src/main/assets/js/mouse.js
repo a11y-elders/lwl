@@ -108,6 +108,18 @@ function lockButtonHandler() {
     buttonHandler('lock');
 }
 
+function soundButtonHandler() {
+    const video = document.getElementById('screen');
+    const soundButtonImg = document.querySelector('#sound .button_image');
+    if (video.muted) {
+        video.muted = false;
+        soundButtonImg.src = 'img/sound.svg';
+    } else {
+        video.muted = true;
+        soundButtonImg.src = 'img/mute.svg';
+    }
+}
+
 function buttonHandler(button) {
     sendMouseMessage('{type=button_' + button + '}');
 }
