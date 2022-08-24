@@ -3,6 +3,7 @@ package com.bbogush.web_screen;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.webkit.SslErrorHandler;
@@ -15,14 +16,15 @@ public class ControlOtherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
         setContentView(R.layout.activity_control_other);
         WebView webView = findViewById(R.id.web_view);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new IgnoreSslWebViewClient());
         String ip = "172.20.10.14";
-        if (savedInstanceState != null) {
-            String inputIp = savedInstanceState.getString("ip");
+        if (intent != null) {
+            String inputIp = intent.getStringExtra("ip");
             if (inputIp != null) {
                 ip = inputIp;
             }
