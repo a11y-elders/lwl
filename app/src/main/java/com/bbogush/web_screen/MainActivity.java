@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReadExternalStoragePermissionGranted(boolean isGranted) {
+            isGranted = true;
             if (isGranted)
                 permissionHelper.requestWakeLockPermission();
             else
