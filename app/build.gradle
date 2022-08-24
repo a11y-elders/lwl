@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.bbogush.web_screen"
-        minSdkVersion 26
+        minSdkVersion 29
         targetSdkVersion 33
         versionCode 7
         versionName "1.1.0"

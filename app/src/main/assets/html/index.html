@@ -16,37 +16,26 @@
 <body>
 <div class="image_div">
     <video id="screen" class="image_screen" autoplay playsinline muted></video>
-    <table>
-        <tbody>
-        <tr>
-            <td>
-                <button type="button" title="Power menu" onclick="powerButtonHandler()">
-                    <img class="button_image" src="img/power.svg">
-                </button>
-            </td>
-            <td>
-                <button type="button" title="Recent" onclick="recentButtonHandler()">
-                    <img class="button_image" src="img/recent.svg">
-                </button>
-            </td>
-            <td>
-                <button type="button" title="Home screen" onclick="homeButtonHandler()">
-                    <img class="button_image" src="img/home.svg">
-                </button>
-            </td>
-            <td>
-                <button type="button" title="Back" onclick="backButtonHandler()">
-                    <img class="button_image" src="img/back.svg">
-                </button>
-            </td>
-            <td>
-                <button type="button" title="Lock/unlock screen" onclick="lockButtonHandler()">
-                    <img class="button_image" src="img/lock.svg">
-                </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="button-bar">
+        <button type="button" title="Power menu" onclick="powerButtonHandler()">
+            <img class="button_image" src="img/power.svg">
+        </button>
+        <button type="button" title="Recent" onclick="recentButtonHandler()">
+            <img class="button_image" src="img/recent.svg">
+        </button>
+        <button type="button" title="Home screen" onclick="homeButtonHandler()">
+            <img class="button_image" src="img/home.svg">
+        </button>
+        <button type="button" title="Back" onclick="backButtonHandler()">
+            <img class="button_image" src="img/back.svg">
+        </button>
+        <button type="button" title="Lock/unlock screen" onclick="lockButtonHandler()">
+            <img class="button_image" src="img/lock.svg">
+        </button>
+        <button id="sound" type="button" title="Turn on sound" onclick="soundButtonHandler()">
+            <img class="button_image" src="img/mute.svg">
+        </button>
+    </div>
 </div>
 
 <script src="js/adapter-latest.js"></script>

@@ -1,7 +1,14 @@
 package com.bbogush.web_screen;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.AudioFormat;
+import android.media.AudioPlaybackCaptureConfiguration;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -10,6 +17,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +39,8 @@ import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
+import org.webrtc.audio.AudioDeviceModule;
+import org.webrtc.audio.JavaAudioDeviceModule;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -63,6 +73,7 @@ public class WebRtcManager {
     private PeerConnection localPeer = null;
     private MediaConstraints sdpConstraints;
     private HttpServer server;
+    private AudioDeviceModule audioDeviceModule;
 
     List<PeerConnection.IceServer> peerIceServers = new ArrayList<>();
     private List<IceServer> iceServers = null;
@@ -74,10 +85,11 @@ public class WebRtcManager {
     public WebRtcManager(Intent intent, Context context, HttpServer server) {
         this.server = server;
         //XXX getIceServers();
-        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         display = wm.getDefaultDisplay();
 
         createMediaProjection(intent);
+        createAudioDeviceModule(context);
         initWebRTC(context);
     }
 
@@ -108,6 +120,65 @@ public class WebRtcManager {
         videoCapturer = null;
     }
 
+    private void createAudioDeviceModule(Context context) {
+        audioDeviceModule = JavaAudioDeviceModule.builder(context)
+                .setAudioRecordErrorCallback(new JavaAudioDeviceModule.AudioRecordErrorCallback() {
+                    @Override
+                    public void onWebRtcAudioRecordInitError(String s) {
+                        Log.d(TAG, "onWebRtcAudioRecordInitError: " + s);
+                    }
+
+                    @Override
+                    public void onWebRtcAudioRecordStartError(JavaAudioDeviceModule.AudioRecordStartErrorCode audioRecordStartErrorCode, String s) {
+                        Log.d(TAG, "onWebRtcAudioRecordStartError: " + audioRecordStartErrorCode + s);
+                    }
+
+                    @Override
+                    public void onWebRtcAudioRecordError(String s) {
+                        Log.d(TAG, "onWebRtcAudioRecordError: " + s);
+                    }
+                })
+                .setAudioRecordStateCallback(new JavaAudioDeviceModule.AudioRecordStateCallback() {
+                    @Override
+                    public void onWebRtcAudioRecordStart() {
+                        Log.d(TAG, "onWebRtcAudioRecordStart");
+                    }
+
+                    @Override
+                    public void onWebRtcAudioRecordStop() {
+                        Log.d(TAG, "onWebRtcAudioRecordStop");
+                    }
+                })
+                .setAudioTrackErrorCallback(new JavaAudioDeviceModule.AudioTrackErrorCallback() {
+                    @Override
+                    public void onWebRtcAudioTrackInitError(String s) {
+                        Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
+                    }
+
+                    @Override
+                    public void onWebRtcAudioTrackStartError(JavaAudioDeviceModule.AudioTrackStartErrorCode audioTrackStartErrorCode, String s) {
+                        Log.d(TAG, "onWebRtcAudioTrackStartError: " + audioTrackStartErrorCode + s);
+                    }
+
+                    @Override
+                    public void onWebRtcAudioTrackError(String s) {
+                        Log.d(TAG, "onWebRtcAudioTrackError: " + s);
+                    }
+                })
+                .setAudioTrackStateCallback(new JavaAudioDeviceModule.AudioTrackStateCallback() {
+                    @Override
+                    public void onWebRtcAudioTrackStart() {
+                        Log.d(TAG, "onWebRtcAudioTrackStart");
+                    }
+
+                    @Override
+                    public void onWebRtcAudioTrackStop() {
+                        Log.d(TAG, "onWebRtcAudioTrackStop");
+                    }
+                })
+                .createAudioDeviceModule();
+    }
+
     private void initWebRTC(Context context) {
         rootEglBase = EglBase.create();
 
@@ -126,6 +197,7 @@ public class WebRtcManager {
                 .setOptions(options)
                 .setVideoEncoderFactory(defaultVideoEncoderFactory)
                 .setVideoDecoderFactory(defaultVideoDecoderFactory)
+                .setAudioDeviceModule(audioDeviceModule)
                 .createPeerConnectionFactory();
 
         //XXX enable camera
@@ -143,8 +215,8 @@ public class WebRtcManager {
 
         localVideoTrack = peerConnectionFactory.createVideoTrack("100", videoSource);
 
-        //TODO audioSource = peerConnectionFactory.createAudioSource(audioConstraints);
-        //TODO localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
+        audioSource = peerConnectionFactory.createAudioSource(audioConstraints);
+        localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
 
         display.getRealMetrics(screenMetrics);
         if (videoCapturer != null) {
@@ -221,7 +293,7 @@ public class WebRtcManager {
 
     private void addStreamToLocalPeer() {
         MediaStream stream = peerConnectionFactory.createLocalMediaStream("102");
-        //TODO stream.addTrack(localAudioTrack);
+        stream.addTrack(localAudioTrack);
         stream.addTrack(localVideoTrack);
         localPeer.addStream(stream);
     }
