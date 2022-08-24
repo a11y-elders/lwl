@@ -21,6 +21,7 @@ public class ControlOtherActivity extends AppCompatActivity {
         WebView webView = findViewById(R.id.web_view);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
         webView.setWebViewClient(new IgnoreSslWebViewClient());
         String ip = "172.20.10.14";
         if (intent != null) {
