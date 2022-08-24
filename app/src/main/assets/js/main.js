@@ -222,6 +222,12 @@ function handleRemoteStreamAdded(event) {
     console.log('WebRTC: remote stream added.');
     remoteStream = event.stream;
     remoteVideo.srcObject = remoteStream;
+    remoteVideo.play().catch(() => {
+        remoteVideo.muted = true;
+        const soundButtonImg = document.querySelector('#sound .button_image');
+        soundButtonImg.src = 'img/mute.svg';
+        return remoteVideo.play();
+    });
 }
 
 function handleRemoteStreamRemoved(event) {

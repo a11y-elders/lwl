@@ -15,7 +15,7 @@
 
 <body>
 <div class="image_div">
-    <video id="screen" class="image_screen" autoplay playsinline muted></video>
+    <video id="screen" class="image_screen" playsinline></video>
     <div class="button-bar">
         <button type="button" title="Power menu" onclick="powerButtonHandler()">
             <img class="button_image" src="img/power.svg">
@@ -32,8 +32,8 @@
         <button type="button" title="Lock/unlock screen" onclick="lockButtonHandler()">
             <img class="button_image" src="img/lock.svg">
         </button>
-        <button id="sound" type="button" title="Turn on sound" onclick="soundButtonHandler()">
-            <img class="button_image" src="img/mute.svg">
+        <button id="sound" type="button" title="Mute/unmute" onclick="soundButtonHandler()">
+            <img class="button_image" src="img/sound.svg">
         </button>
     </div>
 </div>
