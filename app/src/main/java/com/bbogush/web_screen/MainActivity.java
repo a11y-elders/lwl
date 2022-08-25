@@ -396,8 +396,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void urlUpdate() {
-        TextView urlsHeader = findViewById(R.id.urls_header);
-        urlsHeader.setText(getResources().getString(R.string.no_active_connections));
         LinearLayout urlLayout = findViewById(R.id.urlLinerLayout);
         urlLayout.setVisibility(View.INVISIBLE);
 
@@ -419,7 +417,6 @@ public class MainActivity extends AppCompatActivity {
                         httpServerPort;
                 TextView connectionURL = findViewById(R.id.connectionURL);
                 connectionURL.setText(url);
-                urlsHeader.setText(getResources().getString(R.string.urls_header));
                 urlLayout.setVisibility(View.VISIBLE);
                 break;
             }

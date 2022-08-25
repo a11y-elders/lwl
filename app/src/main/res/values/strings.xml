@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WebScreen</string>
+    <string name="app_name">老吾老</string>
     <string name="urls_header">Visit following link in browser</string>
     <string name="button_remote_control_on">Enable remote control</string>
     <string name="button_remote_control_off">Disable remote control</string>
