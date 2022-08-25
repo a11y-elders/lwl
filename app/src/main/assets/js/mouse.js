@@ -12,6 +12,9 @@ function mouseInit(ws) {
     remoteVideoRect.addEventListener('mouseup', mouseUpHandler);
     remoteVideoRect.addEventListener('wheel', mouseWheelHandler);
     remoteVideoRect.addEventListener('ondragstart', onDragStart);
+    remoteVideoRect.addEventListener('touchstart', onTouchStart);
+    remoteVideoRect.addEventListener('touchmove', onTouchMove);
+    remoteVideoRect.addEventListener('touchend', onTouchEnd);
 }
 
 function mouseUninit() {
@@ -20,11 +23,35 @@ function mouseUninit() {
     remoteVideoRect.removeEventListener('mouseup', mouseUpHandler);
     remoteVideoRect.removeEventListener('mousemove', mouseMoveHandler);
     remoteVideoRect.removeEventListener('mousedown', mouseDownHandler);
+    remoteVideoRect.removeEventListener('touchstart', onTouchStart);
+    remoteVideoRect.removeEventListener('touchmove', onTouchMove);
+    remoteVideoRect.removeEventListener('touchend', onTouchEnd);
     remoteVideoRect = null;
 }
 
 function onDragStart() {
     return false;
+}
+
+function onTouchStart(e) {
+    remoteVideoRect.removeEventListener('mouseup', mouseUpHandler);
+    remoteVideoRect.removeEventListener('mousemove', mouseMoveHandler);
+    remoteVideoRect.removeEventListener('mousedown', mouseDownHandler);
+    mouseDown = true;
+    touchHandler(e, 'down');
+}
+
+function onTouchMove(e) {
+    if (!mouseDown)
+        return;
+    touchHandler(e, 'move');
+}
+
+function onTouchEnd(e) {
+    if (!mouseDown)
+        return;
+    mouseDown = false;
+    touchHandler(e, 'up');
 }
 
 function mouseDownHandler(e) {
@@ -69,6 +96,23 @@ function isMouseLeftButtonPressed(e) {
 
     return e.buttons === undefined ? e.which === MOUSE_LEFT_BUTTON_NUMBER :
         e.buttons === MOUSE_LEFT_BUTTON_NUMBER;
+}
+
+function touchHandler(e, action) {
+    let position = getTouchPosition(e);
+    let params = '{type=mouse_' + action + ',x=' + position.x + ',y=' + position.y + '}';
+    sendMouseMessage(params);
+}
+
+function getTouchPosition(e) {
+    let rect = e.target.getBoundingClientRect();
+    let x = e.changedTouches[0].clientX - rect.left;
+    let y = e.changedTouches[0].clientY - rect.top;
+
+    x = Math.round(x * e.target.videoWidth * 1.0 / e.target.clientWidth);
+    y = Math.round(y * e.target.videoHeight * 1.0 / e.target.clientHeight);
+
+    return {x, y};
 }
 
 function mouseHandler(e, action) {
