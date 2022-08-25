@@ -31,17 +31,6 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <TextView
-                android:id="@+id/urls_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/urls_header"
-                android:textAlignment="center"
-                android:textColor="#4a4a4a"
-                android:textSize="18sp" />
-
             <LinearLayout
                 android:id="@+id/urlLinerLayout"
                 android:layout_width="match_parent"
