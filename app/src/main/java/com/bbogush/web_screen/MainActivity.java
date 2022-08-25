@@ -404,17 +404,12 @@ public class MainActivity extends AppCompatActivity {
             if (!ipInfo.interfaceType.equals("Wi-Fi"))
                 continue;
 
-            String type = ipInfo.interfaceType + " (" + ipInfo.interfaceName + ")";
-            TextView connectionType = findViewById(R.id.connectionTypeHeader);
-            connectionType.setText(type);
-
             List<LinkAddress> addresses = ipInfo.addresses;
             for (LinkAddress address : addresses) {
                 if (address.getAddress() instanceof Inet6Address)
                     continue;
 
-                String url = "https://" + address.getAddress().getHostAddress() + ":" +
-                        httpServerPort;
+                String url = address.getAddress().getHostAddress();
                 TextView connectionURL = findViewById(R.id.connectionURL);
                 connectionURL.setText(url);
                 urlLayout.setVisibility(View.VISIBLE);

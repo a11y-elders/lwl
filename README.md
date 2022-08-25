@@ -1,17 +1,7 @@
-# web_screen
-This app is for a11n innovation demonstration month only.
-The Android Java application for screen sharing and remote control from browser based WebRTC.
+This app is for accessibility innovation month demonstration only. It is to
+demonstrate the functionality of remote assistance.
 
-### Use cases
-- Presentation of device screen.
-- Screen mirroring/sharing.
-- Remote control of devices.
-- Remote assistance.
+### Note
+The code is based on the open source code: https://github.com/bbogush/web_screen
 
-### Key Features
-- Screen sharing via web browser.
-- Remote control of device screen by mouse via web browser.
-
-### Google Play
-https://play.google.com/store/apps/details?id=com.bbogush.web_screen
 
