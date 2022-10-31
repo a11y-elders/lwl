@@ -7,100 +7,135 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="561dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/urlLinerLayout"
+            app:srcCompat="@drawable/remote_assistant_diagram" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="409dp"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            android:visibility="invisible"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp" />
 
         <LinearLayout
+            android:id="@+id/urlLinerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:context=".MainActivity">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            </com.google.android.material.appbar.AppBarLayout>
+            android:background="@drawable/bg_item"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:visibility="invisible"
+            tools:layout_editor_absoluteX="63dp"
+            tools:layout_editor_absoluteY="33dp">
 
             <LinearLayout
-                android:id="@+id/urlLinerLayout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="32dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bg_item"
-                android:padding="12dp">
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/wifi_icon"
-                    />
-                <LinearLayout
+                <TextView
+                    android:id="@+id/connectionURL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/connectionURL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="192.168.2.102"
-                        android:textSize="16sp"
-                        android:textColor="#5BA4ED"/>
-                </LinearLayout>
+                    android:text="192.168.2.102"
+                    android:textColor="#5BA4ED"
+                    android:textSize="16sp" />
             </LinearLayout>
-
-            <ToggleButton
-                android:id="@+id/remoteControlEnableSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="50dp"
-                android:background="@drawable/bg_button_off"
-                android:textOff="@string/button_remote_control_on"
-                android:textOn="@string/button_remote_control_off"
-                android:textColor="#4a4a4a"/>
-
-            <ToggleButton
-                android:id="@+id/startButton"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/bg_button_off"
-                android:textOff="@string/button_start"
-                android:textOn="@string/button_stop"
-                android:textColor="#4a4a4a" />
-
-            <Button
-                android:id="@+id/controlButton"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/bg_button_off"
-                android:text="@string/button_control"
-                android:textColor="#4a4a4a" />
         </LinearLayout>
 
-    </ScrollView>
+        <TextView
+            android:id="@+id/remoteAssistantTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Remote Assistant"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/RemoteAssistantSummary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:gravity="center"
+            android:text="Provide remote assistance to authenticated users to run the mobile remotely"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/remoteAssistantTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="168dp"
+        android:layout_gravity="bottom"
+        tools:layout_editor_absoluteY="597dp">
+
+        <ToggleButton
+            android:id="@+id/shareMyScreenButton"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/share_my_screen_button"
+            android:drawableStart="@drawable/share_my_screen_icon"
+            android:gravity="center"
+            android:minWidth="300dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#FFFFFF"
+            android:textOff="Share My Screen - OFF"
+            android:textOn="Share My Screen - ON"
+            app:layout_constraintBottom_toTopOf="@+id/remoteControlButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/remoteControlButton"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/remote_control_button"
+            android:drawableStart="@drawable/remote_control_icon"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#FFFFFF"
+            android:textOff="Remote Control - OFF"
+            android:textOn="Remote Control - ON"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>
 

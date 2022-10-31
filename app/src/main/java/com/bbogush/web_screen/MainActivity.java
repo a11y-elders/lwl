@@ -1,24 +1,10 @@
 package com.bbogush.web_screen;
 
-import static com.bbogush.web_screen.ConnectionService.MESSAGE_DEVICE_NAME;
-import static com.bbogush.web_screen.ConnectionService.MESSAGE_READ;
-import static com.bbogush.web_screen.ConnectionService.MESSAGE_STATE_CHANGE;
-import static com.bbogush.web_screen.ConnectionService.MESSAGE_TOAST;
-import static com.bbogush.web_screen.ConnectionService.MESSAGE_WRITE;
-import static com.bbogush.web_screen.ConnectionService.STATE_CONNECTED;
-import static com.bbogush.web_screen.ConnectionService.STATE_CONNECTING;
-import static com.bbogush.web_screen.ConnectionService.STATE_LISTEN;
-import static com.bbogush.web_screen.ConnectionService.STATE_NONE;
-import static com.bbogush.web_screen.ConnectionService.TOAST;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,7 +12,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.projection.MediaProjectionManager;
 import android.net.LinkAddress;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -35,7 +20,6 @@ import android.os.Message;
 import android.provider.Settings;
 import android.service.controls.Control;
 import android.text.InputType;
-import android.text.format.Formatter;
 import android.text.method.DigitsKeyListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -49,7 +33,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.net.Inet6Address;
@@ -63,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int HANDLER_MESSAGE_UPDATE_NETWORK = 0;
 
-    private static final int REQUEST_ENABLE_BT = 3;
-
     private int httpServerPort;
 
     private AppService appService = null;
@@ -73,55 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private NetworkHelper networkHelper = null;
     private SettingsHelper settingsHelper = null;
     private PermissionHelper permissionHelper;
-    private BluetoothAdapter bluetoothAdapter;
-    private ConnectionService connectionService;
-
-    private boolean isControllee = false;
-
-    /**
-     * The Handler that gets information back from the ConnectionService
-     */
-    private final Handler connectionHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_STATE_CHANGE:
-                    switch (msg.arg1) {
-                        case STATE_CONNECTED:
-                            if (isControllee) {
-                                WifiManager wm = getSystemService(WifiManager.class);
-                                String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-                                connectionService.write(ip.getBytes());
-                            }
-                            break;
-                        case STATE_CONNECTING:
-                            break;
-                        case STATE_LISTEN:
-                        case STATE_NONE:
-                            break;
-                    }
-                    break;
-                case MESSAGE_WRITE:
-                    break;
-                case MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
-                    // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-
-                    if (!isControllee) {
-                        Toast.makeText(MainActivity.this, readMessage,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case MESSAGE_DEVICE_NAME:
-                    break;
-                case MESSAGE_TOAST:
-                        Toast.makeText(MainActivity.this, msg.getData().getString(TOAST),
-                                Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,37 +64,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-        if (bluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            finish();
-        }
-
         initSettings();
 
-        ToggleButton startButton = findViewById(R.id.startButton);
+        ToggleButton startButton = findViewById(R.id.shareMyScreenButton);
         startButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    buttonView.setBackground(getDrawable(R.drawable.bg_button_on));
+                    buttonView.setBackground(getDrawable(R.drawable.share_my_screen_button));
                     start();
                 }
                 else {
-                    buttonView.setBackground(getDrawable(R.drawable.bg_button_off));
+                    buttonView.setBackground(getDrawable(R.drawable.share_my_screen_button));
                     stop();
                 }
             }
         });
 
-        ToggleButton remoteControl = findViewById(R.id.remoteControlEnableSwitch);
+        ToggleButton remoteControl = findViewById(R.id.remoteControlButton);
         remoteControl.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                buttonView.setBackground(getDrawable(isChecked ? R.drawable.bg_button_on :
-                        R.drawable.bg_button_off));
+                buttonView.setBackground(getDrawable(R.drawable.remote_control_button));
                 remoteControlEnable(isChecked);
+                //showControlOtherDialog();
             }
         });
         if (settingsHelper.isRemoteControlEnabled())
@@ -171,50 +96,22 @@ public class MainActivity extends AppCompatActivity {
         if (AppService.isServiceRunning())
             setStartButton();
 
-        Button controlOther = findViewById(R.id.controlButton);
-        controlOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showControlOtherDialog();
-            }
-        });
+//        Button controlOther = findViewById(R.id.controlButton);
+//        controlOther.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showControlOtherDialog();
+//            }
+//        });
         initPermission();
 
         initUrl();
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (bluetoothAdapter == null) {
-            return;
-        }
-        // If BT is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the chat session
-        } else if (connectionService == null) {
-            connectionService = new ConnectionService(this, connectionHandler);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (connectionService != null) {
-            connectionService.start();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         Log.d(TAG, "Activity destroy");
-        if (connectionService != null) {
-            connectionService.stop();
-        }
+
         if (networkHelper != null)
             networkHelper.close();
         unbindService();
@@ -224,15 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void start() {
         Log.d(TAG, "Stream start");
-
-        isControllee = true;
-
-        String address = "14:D1:69:2D:B3:A5";
-        // Get the BluetoothDevice object
-        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-        // Attempt to connect to the device
-        connectionService.connect(device);
-
         if (AppService.isServiceRunning()) {
             bindService();
             return;
@@ -247,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         stopService();
+        resetStartButton();
     }
 
     private void initPermission() {
@@ -430,12 +319,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setStartButton() {
-        ToggleButton startButton = findViewById(R.id.startButton);
+        ToggleButton startButton = findViewById(R.id.shareMyScreenButton);
         startButton.setChecked(true);
     }
 
     private void resetStartButton() {
-        ToggleButton startButton = findViewById(R.id.startButton);
+        ToggleButton startButton = findViewById(R.id.shareMyScreenButton);
         startButton.setChecked(false);
     }
 
@@ -456,12 +345,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setRemoteControlSwitch() {
-        ToggleButton remoteControl = findViewById(R.id.remoteControlEnableSwitch);
+        ToggleButton remoteControl = findViewById(R.id.remoteControlButton);
         remoteControl.setChecked(true);
     }
 
     private void resetRemoteControlSwitch() {
-        ToggleButton remoteControl = findViewById(R.id.remoteControlEnableSwitch);
+        ToggleButton remoteControl = findViewById(R.id.remoteControlButton);
         remoteControl.setChecked(false);
     }
 
