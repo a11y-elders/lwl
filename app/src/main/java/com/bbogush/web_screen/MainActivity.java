@@ -141,28 +141,28 @@ public class MainActivity extends AppCompatActivity {
 
         initSettings();
 
-        ToggleButton startButton = findViewById(R.id.startButton);
+        ToggleButton startButton = findViewById(R.id.shareMyScreenButton);
         startButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    buttonView.setBackground(getDrawable(R.drawable.bg_button_on));
+                    buttonView.setBackground(getDrawable(R.drawable.share_my_screen_button));
                     start();
                 }
                 else {
-                    buttonView.setBackground(getDrawable(R.drawable.bg_button_off));
+                    buttonView.setBackground(getDrawable(R.drawable.share_my_screen_button));
                     stop();
                 }
             }
         });
 
-        ToggleButton remoteControl = findViewById(R.id.remoteControlEnableSwitch);
+        ToggleButton remoteControl = findViewById(R.id.remoteControlButton);
         remoteControl.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                buttonView.setBackground(getDrawable(isChecked ? R.drawable.bg_button_on :
-                        R.drawable.bg_button_off));
+                buttonView.setBackground(getDrawable(R.drawable.remote_control_button));
                 remoteControlEnable(isChecked);
+                //showControlOtherDialog();
             }
         });
         if (settingsHelper.isRemoteControlEnabled())
@@ -171,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
         if (AppService.isServiceRunning())
             setStartButton();
 
-        Button controlOther = findViewById(R.id.controlButton);
-        controlOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showControlOtherDialog();
-            }
-        });
+//        Button controlOther = findViewById(R.id.controlButton);
+//        controlOther.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showControlOtherDialog();
+//            }
+//        });
         initPermission();
 
         initUrl();
@@ -247,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         stopService();
+        resetStartButton();
     }
 
     private void initPermission() {
@@ -430,12 +431,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setStartButton() {
-        ToggleButton startButton = findViewById(R.id.startButton);
+        ToggleButton startButton = findViewById(R.id.shareMyScreenButton);
         startButton.setChecked(true);
     }
 
     private void resetStartButton() {
-        ToggleButton startButton = findViewById(R.id.startButton);
+        ToggleButton startButton = findViewById(R.id.shareMyScreenButton);
         startButton.setChecked(false);
     }
 
@@ -456,12 +457,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setRemoteControlSwitch() {
-        ToggleButton remoteControl = findViewById(R.id.remoteControlEnableSwitch);
+        ToggleButton remoteControl = findViewById(R.id.remoteControlButton);
         remoteControl.setChecked(true);
     }
 
     private void resetRemoteControlSwitch() {
-        ToggleButton remoteControl = findViewById(R.id.remoteControlEnableSwitch);
+        ToggleButton remoteControl = findViewById(R.id.remoteControlButton);
         remoteControl.setChecked(false);
     }
 
