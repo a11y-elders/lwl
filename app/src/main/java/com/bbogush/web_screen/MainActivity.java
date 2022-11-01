@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private ConnectionService connectionService;
 
     private String contactName;
+    private String controllerBluetoothMac;
     ActivityResultLauncher<Void> pickContact = registerForActivityResult(new ActivityResultContracts.PickContact(),
             new ActivityResultCallback<Uri>() {
                 @Override
@@ -108,9 +109,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Contact Selected: " + contactName);
 
                         int rawContactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.RawContacts._ID));
+                        Log.d(TAG, String.join(", ", cursor.getColumnNames()));
+                        for (String name : cursor.getColumnNames()) {
+                            Log.d(TAG, name + ": " + cursor.getString(cursor.getColumnIndex(name)));
+                        }
 //                        String companyName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
 
                         Log.d(TAG, String.valueOf(rawContactId));
+                        controllerBluetoothMac = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.PHONETIC_NAME));
                     }
                     updateContactHolder();
                 }
@@ -303,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        String address = "14:D1:69:2D:B3:A5";
 //        String address = "dc:e5:5b:1a:4e:6d";
-        String address = "88:BF:E4:71:66:1D";
+        String address = controllerBluetoothMac == null ? "88:BF:E4:71:66:1D" : controllerBluetoothMac;
         // Get the BluetoothDevice object
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
         // Attempt to connect to the device
