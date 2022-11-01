@@ -268,6 +268,14 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_DENIED)
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 2);
+                return;
+            }
+        }
 
         if (connectionService != null) {
             connectionService.start();
