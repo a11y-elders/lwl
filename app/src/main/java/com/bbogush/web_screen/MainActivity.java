@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
         bluetoothAdapter = bluetoothManager.getAdapter();
@@ -617,7 +617,7 @@ public class MainActivity extends AppCompatActivity {
                 String url = address.getAddress().getHostAddress();
                 TextView connectionURL = findViewById(R.id.connectionURL);
                 connectionURL.setText(url);
-                urlLayout.setVisibility(View.VISIBLE);
+                //urlLayout.setVisibility(View.VISIBLE);
                 break;
             }
         }

@@ -1,49 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/constraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_absoluteHeight="413dp"
+        tools:layout_conversion_absoluteWidth="411dp"
+        tools:layout_editor_absoluteX="0dp">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="296dp"
-            android:layout_height="213dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/urlLinerLayout"
-            app:srcCompat="@drawable/remote_assistant_diagram" />
+            app:srcCompat="@drawable/remote_assistant_diagram"
+            tools:layout_conversion_absoluteHeight="213dp"
+            tools:layout_conversion_absoluteWidth="296dp" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="409dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             android:visibility="invisible"
+            tools:layout_conversion_absoluteHeight="64dp"
+            tools:layout_conversion_absoluteWidth="409dp"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="1dp" />
 
         <LinearLayout
             android:id="@+id/urlLinerLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_item"
             android:orientation="horizontal"
             android:padding="12dp"
             android:visibility="invisible"
-            tools:layout_editor_absoluteX="1dp"
+            tools:layout_conversion_absoluteHeight="54dp"
+            tools:layout_conversion_absoluteWidth="411dp"
+            tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="1dp">
 
             <LinearLayout
@@ -67,63 +76,67 @@
             android:id="@+id/remoteAssistantTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:text="Remote Assistant"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintBottom_toTopOf="@+id/RemoteAssistantSummary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            tools:layout_conversion_absoluteHeight="45dp"
+            tools:layout_conversion_absoluteWidth="267dp" />
 
         <TextView
             android:id="@+id/RemoteAssistantSummary"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
             android:gravity="center"
             android:text="Provide remote assistance to authenticated users to run the mobile remotely"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/remoteAssistantTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/remoteAssistantTitle"
+            tools:layout_conversion_absoluteHeight="36dp"
+            tools:layout_conversion_absoluteWidth="347dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="227dp">
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/addContactButton"
-            android:layout_width="283dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="64dp"
-            android:clickable="true"
-            android:gravity="center_vertical"
-            android:text="@string/add_contact"
-            android:textColor="#9AA0A6"
-            app:backgroundTint="#FFFFFF"
-            app:icon="@drawable/contact_icon"
-            app:iconTint="#80868B"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/addContactButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="64dp"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:text="@string/add_contact"
+        android:textColor="#9AA0A6"
+        app:backgroundTint="#FFFFFF"
+        app:icon="@drawable/contact_icon"
+        app:iconTint="#80868B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        tools:layout_conversion_absoluteHeight="56dp"
+        tools:layout_conversion_absoluteWidth="283dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="211dp"
-        android:layout_gravity="bottom"
-        tools:layout_editor_absoluteY="502dp">
+        android:id="@+id/constraintLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shareMyScreenButton"
+        tools:layout_conversion_absoluteHeight="211dp"
+        tools:layout_conversion_absoluteWidth="411dp">
 
         <ToggleButton
             android:id="@+id/shareMyScreenButton"
             style="@style/Widget.AppCompat.ActionButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             android:background="@drawable/share_my_screen_button"
@@ -137,17 +150,19 @@
             app:layout_constraintBottom_toTopOf="@+id/remoteControlButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_conversion_absoluteHeight="48dp"
+            tools:layout_conversion_absoluteWidth="331dp" />
 
         <ToggleButton
             android:id="@+id/remoteControlButton"
             style="@style/Widget.AppCompat.ActionButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginStart="40dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="40dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="24dp"
             android:background="@drawable/remote_control_button"
             android:drawableStart="@drawable/remote_control_icon"
             android:gravity="center"
@@ -157,10 +172,13 @@
             android:textOn="@string/remote_control_on"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shareMyScreenButton"
+            tools:layout_conversion_absoluteHeight="48dp"
+            tools:layout_conversion_absoluteWidth="331dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
