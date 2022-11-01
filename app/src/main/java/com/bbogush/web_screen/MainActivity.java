@@ -18,8 +18,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -28,12 +30,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.media.projection.MediaProjectionManager;
 import android.net.LinkAddress;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -102,6 +106,11 @@ public class MainActivity extends AppCompatActivity {
                             contactName = cursor.getString(nameIndex);
                         }
                         Log.d(TAG, "Contact Selected: " + contactName);
+
+                        int rawContactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.RawContacts._ID));
+//                        String companyName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
+
+                        Log.d(TAG, String.valueOf(rawContactId));
                     }
                     updateContactHolder();
                 }
@@ -112,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The Handler that gets information back from the ConnectionService
      */
-    private final Handler connectionHandler = new Handler() {
+    private final Handler connectionHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -142,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!isControllee) {
                         Toast.makeText(MainActivity.this, readMessage,
                                 Toast.LENGTH_SHORT).show();
+                        showControlOtherDialog(readMessage);
                     }
                     break;
                 case MESSAGE_DEVICE_NAME:
@@ -244,6 +254,15 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
+                return;
+            }
+        }
+
         if (connectionService != null) {
             connectionService.start();
         }
@@ -271,9 +290,20 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.d(TAG, "Stream start");
 
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_DENIED)
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 2);
+                return;
+            }
+        }
+
         isControllee = true;
 
-        String address = "14:D1:69:2D:B3:A5";
+//        String address = "14:D1:69:2D:B3:A5";
+//        String address = "dc:e5:5b:1a:4e:6d";
+        String address = "88:BF:E4:71:66:1D";
         // Get the BluetoothDevice object
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
         // Attempt to connect to the device
@@ -372,13 +402,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showControlOtherDialog() {
+    private void showControlOtherDialog(String ip) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Remote IP");
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         input.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
+        input.setText(ip);
         builder.setView(input);
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
