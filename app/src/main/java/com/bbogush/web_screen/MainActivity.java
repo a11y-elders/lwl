@@ -11,6 +11,10 @@ import static com.bbogush.web_screen.ConnectionService.STATE_LISTEN;
 import static com.bbogush.web_screen.ConnectionService.STATE_NONE;
 import static com.bbogush.web_screen.ConnectionService.TOAST;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,14 +29,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.media.projection.MediaProjectionManager;
 import android.net.LinkAddress;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.service.controls.Control;
 import android.text.InputType;
@@ -78,7 +85,27 @@ public class MainActivity extends AppCompatActivity {
     private PermissionHelper permissionHelper;
     private BluetoothAdapter bluetoothAdapter;
     private ConnectionService connectionService;
+
     private String contactName;
+    ActivityResultLauncher<Void> pickContact = registerForActivityResult(new ActivityResultContracts.PickContact(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    // Handle the returned Uri
+                    if (uri == null) {
+                        return;
+                    }
+                    Cursor cursor = getContentResolver().query(uri, null, null, null);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        int nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+                        if (nameIndex >= 0) {
+                            contactName = cursor.getString(nameIndex);
+                        }
+                        Log.d(TAG, "Contact Selected: " + contactName);
+                    }
+                    updateContactHolder();
+                }
+            });
 
     private boolean isControllee = false;
 
@@ -170,23 +197,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            contactName = getIntent().getStringExtra("contact");
-            Log.d(TAG, "Contact Name set to: " + contactName);
-        }
-
         ExtendedFloatingActionButton addContactButton = findViewById(R.id.addContactButton);
-        if (contactName != null && !contactName.isEmpty()) {
-            addContactButton.setIconTint(ColorStateList.valueOf(R.color.colorAccent));
-            addContactButton.setIcon(getDrawable(R.drawable.avatar_icon));
-            addContactButton.setText(contactName);
-        }
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SelectContactActivity.class);
-                startActivity(intent);
+                pickContact.launch(null);
             }
         });
 
@@ -283,6 +298,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void initPermission() {
         permissionHelper = new PermissionHelper(this, new OnPermissionGrantedListener());
+    }
+
+    private void updateContactHolder() {
+        ExtendedFloatingActionButton addContactButton = findViewById(R.id.addContactButton);
+        if (contactName != null && !contactName.isEmpty()) {
+            addContactButton.setIconTint(ColorStateList.valueOf(R.color.colorAccent));
+            addContactButton.setIcon(getDrawable(R.drawable.avatar_icon));
+            addContactButton.setText(contactName);
+        }
     }
 
     private class OnPermissionGrantedListener implements

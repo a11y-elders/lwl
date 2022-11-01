@@ -58,12 +58,6 @@
             android:name=".AdminActivity"
             android:theme="@style/Theme.Transparent" />
 
-        <activity
-            android:name=".SelectContactActivity"
-            android:exported="false"
-            android:theme="@style/AppActionBarTheme"
-            android:parentActivityName=".MainActivity"/>
-
         <receiver
             android:name=".AdminReceiver"
             android:exported="true"
