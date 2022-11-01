@@ -15,4 +15,10 @@
     <string name="adaptive_banner_ad_unit_id">ca-app-pub-6312357173588580/8818719441</string>
     <string name="ask_admin_permission">Provide admin permission for screen lock</string>
     <string name="port_in_use">Error: the port %d is already in use.</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="share_my_screen_off">Share My Screen - OFF</string>
+    <string name="share_my_screen_on">Share My Screen - ON</string>
+    <string name="remote_control_off">Remote Control - OFF</string>
+    <string name="remote_control_on">Remote Control - ON</string>
+    <string name="contacts">Contacts</string>
 </resources>

@@ -5,16 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="bottom"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="561dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="296dp"
+            android:layout_height="213dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
@@ -42,8 +43,8 @@
             android:orientation="horizontal"
             android:padding="12dp"
             android:visibility="invisible"
-            tools:layout_editor_absoluteX="63dp"
-            tools:layout_editor_absoluteY="33dp">
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -89,9 +90,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="168dp"
+        android:layout_height="227dp">
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addContactButton"
+            android:layout_width="283dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="64dp"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:text="@string/add_contact"
+            android:textColor="#9AA0A6"
+            app:backgroundTint="#FFFFFF"
+            app:icon="@drawable/contact_icon"
+            app:iconTint="#80868B"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="211dp"
         android:layout_gravity="bottom"
-        tools:layout_editor_absoluteY="597dp">
+        tools:layout_editor_absoluteY="502dp">
 
         <ToggleButton
             android:id="@+id/shareMyScreenButton"
@@ -107,8 +132,8 @@
             android:minWidth="300dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#FFFFFF"
-            android:textOff="Share My Screen - OFF"
-            android:textOn="Share My Screen - ON"
+            android:textOff="@string/share_my_screen_off"
+            android:textOn="@string/share_my_screen_on"
             app:layout_constraintBottom_toTopOf="@+id/remoteControlButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -128,8 +153,8 @@
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#FFFFFF"
-            android:textOff="Remote Control - OFF"
-            android:textOn="Remote Control - ON"
+            android:textOff="@string/remote_control_off"
+            android:textOn="@string/remote_control_on"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

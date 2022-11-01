@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.ColorStateList;
 import android.media.projection.MediaProjectionManager;
 import android.net.LinkAddress;
 import android.net.wifi.WifiManager;
@@ -52,6 +53,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
 import java.net.Inet6Address;
 import java.util.List;
 
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private PermissionHelper permissionHelper;
     private BluetoothAdapter bluetoothAdapter;
     private ConnectionService connectionService;
+    private String contactName;
 
     private boolean isControllee = false;
 
@@ -165,6 +169,27 @@ public class MainActivity extends AppCompatActivity {
                 //showControlOtherDialog();
             }
         });
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            contactName = getIntent().getStringExtra("contact");
+            Log.d(TAG, "Contact Name set to: " + contactName);
+        }
+
+        ExtendedFloatingActionButton addContactButton = findViewById(R.id.addContactButton);
+        if (contactName != null && !contactName.isEmpty()) {
+            addContactButton.setIconTint(ColorStateList.valueOf(R.color.colorAccent));
+            addContactButton.setIcon(getDrawable(R.drawable.avatar_icon));
+            addContactButton.setText(contactName);
+        }
+        addContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SelectContactActivity.class);
+                startActivity(intent);
+            }
+        });
+
         if (settingsHelper.isRemoteControlEnabled())
             remoteControl.setChecked(true);
 
@@ -223,6 +248,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void start() {
+        if (contactName == null || contactName.isEmpty()) {
+            Log.d(TAG, "Contact not set");
+            Toast.makeText(this, "Please select Contact First!", Toast.LENGTH_SHORT).show();
+            resetStartButton();
+            return;
+        }
         Log.d(TAG, "Stream start");
 
         isControllee = true;
