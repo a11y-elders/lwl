@@ -40,7 +40,7 @@ public class ConnectionService {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String NAME_SECURE = "BluetoothConnection";
     private static final UUID MY_UUID_SECURE =
-            UUID.fromString("e313371f-7653-47fc-a3e3-0715485c0ae5");
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private BluetoothAdapter bluetoothAdapter;
     private Context context;
@@ -246,7 +246,7 @@ public class ConnectionService {
 
             // Create a new listening server socket
             try {
-                tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME_SECURE,
+                tmp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(NAME_SECURE,
                         MY_UUID_SECURE);
 
             } catch (IOException e) {
@@ -325,7 +325,7 @@ public class ConnectionService {
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                    tmp = device.createRfcommSocketToServiceRecord(
+                    tmp = device.createInsecureRfcommSocketToServiceRecord(
                             MY_UUID_SECURE);
             } catch (IOException e) {
                 Log.e(TAG, "create() failed", e);
