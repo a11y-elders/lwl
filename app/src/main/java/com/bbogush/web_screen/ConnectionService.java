@@ -353,6 +353,7 @@ public class ConnectionService {
                 } catch (IOException e2) {
                     Log.e(TAG, "unable to close() during connection failure", e2);
                 }
+                Log.e(TAG, "unable to connect()", e);
                 connectionFailed();
                 return;
             }
