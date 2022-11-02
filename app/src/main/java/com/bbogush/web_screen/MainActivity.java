@@ -318,6 +318,12 @@ public class MainActivity extends AppCompatActivity {
 //        String address = "14:D1:69:2D:B3:A5";
 //        String address = "dc:e5:5b:1a:4e:6d";
         String address = controllerBluetoothMac == null ? "88:BF:E4:71:66:1D" : controllerBluetoothMac;
+        if (bluetoothAdapter.getBondedDevices().stream().noneMatch(device -> device.getAddress().equals(address))) {
+            Toast.makeText(MainActivity.this, "Bond the devices first",
+                    Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Bond the devices first");
+            return;
+        }
         // Get the BluetoothDevice object
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
         // Attempt to connect to the device
