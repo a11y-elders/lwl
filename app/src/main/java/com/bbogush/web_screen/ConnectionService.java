@@ -315,7 +315,7 @@ public class ConnectionService {
      * succeeds or fails.
      */
     private class ConnectThread extends Thread {
-        private final BluetoothSocket socket;
+        private BluetoothSocket socket;
         private final BluetoothDevice device;
 
         public ConnectThread(BluetoothDevice device) {
@@ -347,14 +347,24 @@ public class ConnectionService {
                 // successful connection or an exception
                 socket.connect();
             } catch (IOException e) {
-                // Close the socket
                 try {
-                    socket.close();
-                } catch (IOException e2) {
-                    Log.e(TAG, "unable to close() during connection failure", e2);
+                    Log.e(TAG,"trying fallback...", e);
+
+                    socket =(BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(device,1);
+                    socket.connect();
+
+                    Log.e(TAG,"Connected");
                 }
-                Log.e(TAG, "unable to connect()", e);
-                connectionFailed();
+                catch (Exception e2) {
+                    Log.e(TAG, "Couldn't establish Bluetooth connection in fallback!", e2);
+                    // Close the socket
+                    try {
+                        socket.close();
+                    } catch (IOException e3) {
+                        Log.e(TAG, "unable to close() during connection failure", e3);
+                    }
+                    connectionFailed();
+                }
                 return;
             }
 
