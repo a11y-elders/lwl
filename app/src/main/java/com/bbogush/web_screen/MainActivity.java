@@ -13,11 +13,8 @@ import static com.bbogush.web_screen.ConnectionService.TOAST;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -27,7 +24,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -45,26 +41,24 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.service.controls.Control;
-import android.text.InputType;
 import android.text.format.Formatter;
-import android.text.method.DigitsKeyListener;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import java.net.Inet6Address;
 import java.util.List;
@@ -155,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
                     String readMessage = new String(readBuf, 0, msg.arg1);
 
                     if (!isControllee) {
-                        Toast.makeText(MainActivity.this, readMessage,
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, readMessage,
+//                                Toast.LENGTH_SHORT).show();
                         showControlOtherDialog(readMessage);
                     }
                     break;
@@ -209,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setBackground(getDrawable(R.drawable.remote_control_button));
                 remoteControlEnable(isChecked);
-                //showControlOtherDialog();
             }
         });
 
@@ -423,33 +416,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showControlOtherDialog(String ip) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Remote IP");
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.dialog_confirm);
 
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        input.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
-        input.setText(ip);
-        builder.setView(input);
+        TextView contactNameHolder = bottomSheetDialog.findViewById(R.id.contactName);
+        TextView invitationHolder = bottomSheetDialog.findViewById(R.id.textInvitation);
+        if (contactName != null) {
+            contactNameHolder.setText(contactName);
+            invitationHolder.setText(contactName + " " + getString(R.string.share_screen_text));
+        }
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        Button cancelButton = bottomSheetDialog.findViewById(R.id.buttonCancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String ip = input.getText().toString();
+            public void onClick(View view) {
+                bottomSheetDialog.cancel();
+                resetRemoteControlSwitch();
+            }
+        });
 
+
+        Button acceptButton = bottomSheetDialog.findViewById(R.id.buttonAccept);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ControlOtherActivity.class);
                 intent.putExtra("ip", ip);
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
 
-        builder.show();
+        bottomSheetDialog.show();
     }
 
     @Override

@@ -218,11 +218,11 @@ public class ConnectionService {
      */
     private void connectionLost() {
         // Send a failure message back to the Activity
-        Message msg = handler.obtainMessage(MESSAGE_TOAST);
-        Bundle bundle = new Bundle();
-        bundle.putString(TOAST, "Device connection was lost");
-        msg.setData(bundle);
-        handler.sendMessage(msg);
+//        Message msg = handler.obtainMessage(MESSAGE_TOAST);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(TOAST, "Device connection was lost");
+//        msg.setData(bundle);
+//        handler.sendMessage(msg);
 
         state = STATE_NONE;
         // Update UI title
